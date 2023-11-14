@@ -15,8 +15,6 @@ public class AutomationPageObject extends Common {
     private static final By allInputsAvailableOnPage = By.xpath("//input");
     private static final By sliderElement = By.id("a");
     private static final By submitButton = By.xpath("//button[normalize-space()='Submit']");
-    private static final By quantityInput = By.id("quantity");
-    private static final By dayElement = By.id("day");
 
     private static WebElement optionInListDropDown;
 
@@ -61,16 +59,6 @@ public class AutomationPageObject extends Common {
 
     public static void selectOptionByName(String name) {
         checkBoxOptionByName(name).click();
-    }
-
-    public static void selectDate(String date) {
-//        List<String> listOfSplitedDate = new ArrayList<>();
-//        StringBuilder bufor = new StringBuilder();
-//        for (int i = 1; i < 4; i++) {
-//            listOfSplitedDate.add(getTextFromStringByRegex(date, "(\\d{2})-(\\d{2})-(\\d{4})", i));
-//            bufor.append(getTextFromStringByRegex(date, "(\\d{2})-(\\d{2})-(\\d{4})", i));
-//        }
-//        driver.findElement(dayElement).sendKeys(bufor);
     }
 
     public static void moveSliderTo(double value) {

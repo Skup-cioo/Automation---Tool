@@ -31,7 +31,3 @@ Feature: Automation cases
   Scenario: Select several applicable options
     Given [AUTOMATION][Main Page] Select option by name 'Option 2' from applicable options
     Then [COMMON] Take a screenShot
-
-  Scenario: Select correct date and scroll to range
-    Given [AUTOMATION][Main Page] Select date '{11-12-2023}'
-    Then [COMMON] Take a screenShot

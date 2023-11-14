@@ -51,11 +51,6 @@ public class AutomationSteps {
         AutomationPageObject.selectOptionByName(name);
     }
 
-    @Given(APP_AND_PAGE_NAME + "Select date '{}'")
-    public void automationMainPageSelectDate(String date) {
-        AutomationPageObject.selectDate(date);
-    }
-
     @Given(APP_AND_PAGE_NAME + "user move slider to value '{}'")
     public void automationMainPageUserMoveSliderTo(double value) {
         AutomationPageObject.moveSliderTo(value);

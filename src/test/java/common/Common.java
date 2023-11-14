@@ -1,10 +1,13 @@
 package common;
 
+
 import config.PropertiesFile;
 import io.cucumber.core.internal.com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.core.internal.com.fasterxml.jackson.databind.ObjectMapper;
-import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
 import org.apache.commons.io.FileUtils;
+import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
@@ -16,8 +19,6 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,24 +63,6 @@ public class Common {
         }
     }
 
-    public static void dragAndDropElement(By draggable, By droppable) {
-        WebElement draggableWebElement = driver.findElement(draggable);
-        WebElement droppableWebElement = driver.findElement(droppable);
-        actions.dragAndDrop(draggableWebElement, droppableWebElement).build().perform();
-    }
-
-    public static void dragAndDropBy(By draggable, int x, int y) {
-        WebElement draggableWebElement = driver.findElement(draggable);
-        actions.dragAndDropBy(draggableWebElement, x, y).build().perform();
-    }
-
-    public static void clickAndHold(WebElement firstLetterElement, WebElement secondLetterElement) {
-        actions.moveToElement(firstLetterElement);
-        actions.clickAndHold();
-        actions.moveToElement(secondLetterElement).release();
-        actions.build().perform();
-    }
-
     public static void waitSomeTime(Timeouts time) {
         try {
             Thread.sleep(time.getMilliseconds());
@@ -88,15 +71,34 @@ public class Common {
         }
     }
 
-    public static By elementContainsText(String text) {
-        return By.xpath(String.format("//a[normalize-space()='%s']", text));
-    }
-
     public static void maxWindow() {
         driver.manage().window().maximize();
     }
 
-    public static void clickIfExist(WebElement element) throws NotFoundException {
+    protected static void dragAndDropElement(By draggable, By droppable) {
+        WebElement draggableWebElement = driver.findElement(draggable);
+        WebElement droppableWebElement = driver.findElement(droppable);
+        actions.dragAndDrop(draggableWebElement, droppableWebElement).build().perform();
+    }
+
+    protected static void dragAndDropBy(By draggable, int x, int y) {
+        WebElement draggableWebElement = driver.findElement(draggable);
+        actions.dragAndDropBy(draggableWebElement, x, y).build().perform();
+    }
+
+    protected static void clickAndHold(WebElement firstLetterElement, WebElement secondLetterElement) {
+        actions.moveToElement(firstLetterElement);
+        actions.clickAndHold();
+        actions.moveToElement(secondLetterElement).release();
+        actions.build().perform();
+    }
+
+
+    protected static By elementContainsText(String text) {
+        return By.xpath(String.format("//a[normalize-space()='%s']", text));
+    }
+
+    protected static void clickIfExist(WebElement element) throws NotFoundException {
         if (element.isDisplayed()) {
             element.click();
         } else {
@@ -104,17 +106,34 @@ public class Common {
         }
     }
 
-    public static String createUsersBody(String name, String job) throws JsonProcessingException {
-        User user = new User();
-        user.setName(name);
-        user.setJob(job);
-        List<User> userList = new ArrayList<>();
-        userList.add(user);
+    protected static String createUsersBody(String name, String job) throws JsonProcessingException {
+        User user = new User(name, job);
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(userList);
+        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(user);
     }
 
-    public static String getTextFromStringByRegex(String allText, String regex, int index) {
+    protected static String createAccountBody(String email, String password) throws JsonProcessingException {
+        Account account = new Account(email, password);
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(account);
+    }
+
+    protected static void verifyStatusCode(int expectedStatus, int actualStatus) {
+        Assert.assertEquals("Status code invalid", expectedStatus, actualStatus);
+    }
+
+    protected static void saveParamFromResponse(String paramName, Response response, String path) {
+        JsonPath jsonPath = new JsonPath(response.prettyPrint());
+        TestExectution.paramStore.setParam(paramName, jsonPath.get(path));
+    }
+
+    protected static Boolean validText(String text, String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(text);
+        return matcher.find();
+    }
+
+    protected static String getTextFromStringByRegex(String allText, String regex, int index) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(allText);
         if (matcher.find()) {

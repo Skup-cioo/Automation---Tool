@@ -4,22 +4,15 @@ import lombok.Getter;
 
 @Getter
 public class User {
-    private String name;
-    private String job;
+    private final String name;
+    private final String job;
 
-    public void setName(String name) {
-        if (name.length() > 3) {
+    public User(String name, String job) {
+        if (Common.validText(name, "^.{3,}$") || Common.validText(job, "^.{3,}$")) {
             this.name = name;
-        } else {
-            throw new IllegalArgumentException("Name is incorrect");
-        }
-    }
-
-    public void setJob(String job) {
-        if (job.length() > 3) {
             this.job = job;
         } else {
-            throw new IllegalArgumentException("Job is incorrect");
+            throw new IllegalArgumentException("Name or Job is incorrect");
         }
     }
 }

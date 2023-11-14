@@ -24,6 +24,11 @@ public class ApiReqresSteps {
         ApiReqresPageObject.userWithIdshouldNotExist(ApiReqresPageObject.getDataById(id));
     }
 
+    @And(APP_AND_PAGE_NAME + "verify if recently created user exist")
+    public void verifyIfUserExist() {
+        ApiReqresPageObject.userShouldExist(ApiReqresPageObject.getDataById());
+    }
+
     @Given(APP_AND_PAGE_NAME + "create new user with name '{}' and job '{}'")
     public void postCreateNewUserWithNameAndJob(String name, String job) throws JsonProcessingException {
         ApiReqresPageObject.postCreateNewUser(ApiReqresPageObject.createUser(name, job));
@@ -32,5 +37,14 @@ public class ApiReqresSteps {
     @Given(APP_AND_PAGE_NAME + "update user's name '{}' and job '{}' for user id '{}'")
     public void updateUserWithIdNewNameAndJob(String name, String job, String id) throws JsonProcessingException {
         ApiReqresPageObject.putCreateNewUser(id, ApiReqresPageObject.createUser(name, job));
+    }
+    @Given(APP_AND_PAGE_NAME + "update user's name '{}' and job '{}' for recently created user")
+    public void updateUserWithIdNewNameAndJob(String name, String job) throws JsonProcessingException {
+        ApiReqresPageObject.putCreateNewUser(ApiReqresPageObject.createUser(name, job));
+    }
+
+    @Given(APP_AND_PAGE_NAME + "register new account with email '{}' and password '{}'")
+    public void createNewAccount(String email, String password) throws JsonProcessingException {
+        ApiReqresPageObject.postCreateNewAccount(ApiReqresPageObject.createAccount(email, password));
     }
 }
