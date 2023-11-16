@@ -2,7 +2,7 @@ package stepsDefiniton;
 
 import pageObjects.AutomationPageObject;
 import common.Common;
-import common.GeneratorPolishName;
+import common.ownResources.GeneratorPolishName;
 import common.Timeouts;
 import io.cucumber.java.en.*;
 

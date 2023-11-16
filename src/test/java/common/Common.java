@@ -1,6 +1,9 @@
 package common;
 
 
+import common.ownResources.Account;
+import common.ownResources.Client;
+import common.ownResources.User;
 import config.PropertiesFile;
 import io.cucumber.core.internal.com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.core.internal.com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,6 +32,7 @@ public class Common {
     protected static Select select;
     protected static Boolean driverExist = false;
     private static String path = "C:\\AutomationProject";
+    protected static final String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
 
     public static void createDriver() {
         System.setProperty("webdriver.chromer.driver", path + "\\src\\main\\resources\\geckodriver.exe"); //depends which browser do you use
@@ -93,7 +97,6 @@ public class Common {
         actions.build().perform();
     }
 
-
     protected static By elementContainsText(String text) {
         return By.xpath(String.format("//a[normalize-space()='%s']", text));
     }
@@ -106,7 +109,7 @@ public class Common {
         }
     }
 
-    protected static String createUsersBody(String name, String job) throws JsonProcessingException {
+    protected static String createUserBody(String name, String job) throws JsonProcessingException {
         User user = new User(name, job);
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(user);
@@ -118,8 +121,19 @@ public class Common {
         return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(account);
     }
 
+    protected static String createClientBody(String name, String email) throws JsonProcessingException {
+        Client client = new Client(name, email);
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(client);
+    }
+
     protected static void verifyStatusCode(int expectedStatus, int actualStatus) {
         Assert.assertEquals("Status code invalid", expectedStatus, actualStatus);
+    }
+
+    protected static Boolean checkIfFieldEquals(Response response, String path, Object expectedValue) {
+        JsonPath jsonPath = new JsonPath(response.prettyPrint());
+        return jsonPath.get(path).equals(expectedValue);
     }
 
     protected static void saveParamFromResponse(String paramName, Response response, String path) {
@@ -130,7 +144,7 @@ public class Common {
     protected static Boolean validText(String text, String regex) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(text);
-        return matcher.find();
+        return matcher.matches();
     }
 
     protected static String getTextFromStringByRegex(String allText, String regex, int index) {

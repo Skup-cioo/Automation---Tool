@@ -11,7 +11,7 @@ import io.restassured.response.Response;
 import org.junit.Assert;
 
 public class ApiReqresPageObject extends Common {
-    private static String apiBasePath = PropertiesFile.readProperties("apiBasePath");
+    private static String apiBasePath = PropertiesFile.readProperties("apiReqresBasePath");
 
     public static void getListUsers(int numberOfPage) {
         RestAssured.given().log().all()
@@ -73,7 +73,7 @@ public class ApiReqresPageObject extends Common {
     }
 
     public static String createUser(String name, String job) throws JsonProcessingException {
-        return createUsersBody(name, job);
+        return createUserBody(name, job);
     }
 
     public static String createAccount(String email, String password) throws JsonProcessingException {

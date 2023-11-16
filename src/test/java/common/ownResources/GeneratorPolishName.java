@@ -1,4 +1,4 @@
-package common;
+package common.ownResources;
 
 import io.codearte.jfairy.Fairy;
 
@@ -13,5 +13,9 @@ public class GeneratorPolishName {
 
     public static String getRandomLastName() {
         return PLFAIRY.person().getLastName();
+    }
+
+    public static String getRandomEmail() {
+        return PLFAIRY.person().getEmail();
     }
 }

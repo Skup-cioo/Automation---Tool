@@ -38,6 +38,7 @@ public class ApiReqresSteps {
     public void updateUserWithIdNewNameAndJob(String name, String job, String id) throws JsonProcessingException {
         ApiReqresPageObject.putCreateNewUser(id, ApiReqresPageObject.createUser(name, job));
     }
+
     @Given(APP_AND_PAGE_NAME + "update user's name '{}' and job '{}' for recently created user")
     public void updateUserWithIdNewNameAndJob(String name, String job) throws JsonProcessingException {
         ApiReqresPageObject.putCreateNewUser(ApiReqresPageObject.createUser(name, job));
