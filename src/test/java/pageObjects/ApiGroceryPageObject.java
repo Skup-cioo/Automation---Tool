@@ -10,9 +10,11 @@ import io.cucumber.core.internal.com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -36,27 +38,31 @@ public class ApiGroceryPageObject extends Common {
 
     public static void getCheckApiStatus() {
         Response response = RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
                 .baseUri(apiBasePath)
                 .basePath("/status")
+                .contentType(ContentType.JSON)
                 .when()
                 .get()
                 .then()
+                .assertThat().body("status", Matchers.equalTo("UP")) // We can use RestAssured method -> But this is hard Assertion
+                .log().all()
                 .extract().response();
-        Assert.assertEquals("Status is incorrect", checkIfFieldEquals(response, "status", "UP"), true);
+
+        Assert.assertEquals("Status is incorrect", checkIfFieldEquals(response, "status", "UP"), true);  // We can use our method which is not hard Asserion and has our description in case faile
     }
 
     public static void postCreateNewClient(String body) {
-        Response response = RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
+        String accessToken = RestAssured.given().log().all()
                 .baseUri(apiBasePath)
                 .basePath("/api-clients")
+                .contentType(ContentType.JSON)
                 .body(body)
                 .when()
                 .post()
                 .then()
-                .extract().response();
-        saveParamFromResponse("accessToken", response, "accessToken");
+                .extract().path("accessToken");
+        TestExectution.paramStore.setParam("accessToken", accessToken);
+        // saveParamFromResponse("itemId", response, "itemId"); -> We can extract accessToken from RestAssured or extract full response and use this method
     }
 
     public static String createClient(String name, String email) throws JsonProcessingException {
@@ -64,34 +70,38 @@ public class ApiGroceryPageObject extends Common {
     }
 
     public static void postCreateBasket() {
-        Response response = RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
+        String cartId = RestAssured.given().log().all()
                 .baseUri(apiBasePath)
                 .basePath("/carts")
+                .contentType(ContentType.JSON)
                 .when()
                 .post()
                 .then()
-                .extract().response();
-        saveParamFromResponse("cartId", response, "cartId");
+                .extract().path("cartId");
+        TestExectution.paramStore.setParam("cartId", cartId);
     }
 
     public static void getAllAvailableProducts() {
         Response response = RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
                 .baseUri(apiBasePath)
                 .basePath("/products")
+                .contentType(ContentType.JSON)
                 .when()
                 .get()
                 .then()
+                .log().all()
+                .assertThat()
+                .statusCode(200)
                 .extract().response();
+
         Common.verifyStatusCode(200, response.statusCode());
     }
 
     public static void getProductsWithCategory() throws JsonProcessingException {
         Response response = RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
                 .baseUri(apiBasePath)
                 .basePath("/products")
+                .contentType(ContentType.JSON)
                 .when()
                 .get()
                 .then()
@@ -117,17 +127,17 @@ public class ApiGroceryPageObject extends Common {
         String body = objectMapper.writeValueAsString(bodyParmas);
         String cardId = (String) TestExectution.paramStore.getParam("cartId");
 
-        Response response = RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
+        String itemId = RestAssured.given().log().all()
                 .baseUri(apiBasePath)
                 .basePath(String.format("/carts/%s/items", cardId))
+                .contentType(ContentType.JSON)
                 .body(body)
                 .when()
                 .post()
                 .then()
-                .extract().response();
+                .extract().path("itemId");
 
-        saveParamFromResponse("itemId", response, "itemId");
+        TestExectution.paramStore.setParam("itemId", itemId);
     }
 
     public static void patchUpdateQuantity(Integer quantity) throws JsonProcessingException {
@@ -138,28 +148,26 @@ public class ApiGroceryPageObject extends Common {
         String cardId = (String) TestExectution.paramStore.getParam("cartId");
         String itemId = TestExectution.paramStore.getParam("itemId").toString();
 
-        Response response = RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
+        RestAssured.given().log().all()
                 .baseUri(apiBasePath)
                 .basePath(String.format("/carts/%s/items/%s", cardId, itemId))
+                .contentType(ContentType.JSON)
                 .body(body)
                 .when()
                 .patch()
                 .then()
                 .extract().response();
-        System.out.println("update" + response.prettyPrint());
     }
 
     public static void getBasket() {
         String cardId = (String) TestExectution.paramStore.getParam("cartId");
-        Response response = RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
+        RestAssured.given().log().all()
                 .baseUri(apiBasePath)
                 .basePath(String.format("/carts/%s", cardId))
+                .contentType(ContentType.JSON)
                 .when()
                 .get()
                 .then()
                 .extract().response();
-        System.out.println(response.prettyPrint());
     }
 }

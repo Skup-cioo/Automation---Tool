@@ -8,7 +8,6 @@ public class Hooks extends Common {
     public void closeDriver() {
         if (driverExist) {
             Common.driver.close();
-            System.out.println("Closed Driver");
         }
     }
 }

@@ -9,7 +9,7 @@ Feature: Api Grocery Store
 
   @ApiTraning @GroceryStore
   Scenario: Test
-    Then [GROCERY][API] create new client with name 'Kacper' and email 'kacper121123456@o2.pl'
+    Then [GROCERY][API] create new client with name 'Kacper' and email 'kacper3122121423456@o2.pl'
     And [GROCERY][API] create basket
     Then [GROCERY][API] get all available products
     And [GROCERY][API] get all available products where category 'coffee'
