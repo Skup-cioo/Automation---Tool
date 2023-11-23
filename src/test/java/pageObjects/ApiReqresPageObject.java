@@ -17,8 +17,10 @@ public class ApiReqresPageObject extends Common {
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .baseUri(apiBasePath)
-                .basePath("/api/users")
-                .get("?page=" + numberOfPage)
+                .basePath("/api/users/")
+                .pathParam("pageNumber", numberOfPage)
+                .when()
+                .get("{pageNumber}")
                 .then()
                 .extract().response();
     }
@@ -28,8 +30,10 @@ public class ApiReqresPageObject extends Common {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .baseUri(apiBasePath)
-                .basePath("/api/users")
-                .get(String.valueOf(id))
+                .basePath("/api/users/")
+                .pathParam("id", id)
+                .when()
+                .get("{id}")
                 .then()
                 .extract().response();
     }
@@ -39,8 +43,10 @@ public class ApiReqresPageObject extends Common {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .baseUri(apiBasePath)
-                .basePath("/api/users")
-                .get(String.valueOf(id))
+                .basePath("/api/users/")
+                .pathParam("id", id)
+                .when()
+                .get("{id}")
                 .then()
                 .extract().response();
     }
@@ -84,9 +90,11 @@ public class ApiReqresPageObject extends Common {
         Response response = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .baseUri(apiBasePath)
-                .basePath("/api/users/" + id)
+                .basePath("/api/users/")
+                .pathParam("id", id)
                 .body(body)
-                .put()
+                .when()
+                .put("{id}")
                 .then()
                 .extract().response();
         verifyStatusCode(200, response.statusCode());
@@ -94,11 +102,10 @@ public class ApiReqresPageObject extends Common {
 
     public static void putCreateNewUser(String body) {
         String id = TestExectution.paramStore.getParam("userId").toString();
-        System.out.println("Asasas" + id);
         Response response = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .baseUri(apiBasePath)
-                .basePath("/api/users/" + id)
+                .basePath(String.format("/api/users/%s", id)) // Different way we, dont want use pathparam here for example
                 .body(body)
                 .put()
                 .then()
@@ -110,9 +117,9 @@ public class ApiReqresPageObject extends Common {
         Response response = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .baseUri(apiBasePath)
-                .basePath("/api/register")
+                .basePath("/api")
                 .body(body)
-                .post()
+                .post("/register")
                 .then()
                 .extract().response();
         saveParamFromResponse("id", response, "id");

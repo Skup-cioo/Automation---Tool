@@ -39,6 +39,7 @@ public class ApiGroceryPageObject extends Common {
                 .contentType(ContentType.JSON)
                 .baseUri(apiBasePath)
                 .basePath("/status")
+                .when()
                 .get()
                 .then()
                 .extract().response();
@@ -51,6 +52,7 @@ public class ApiGroceryPageObject extends Common {
                 .baseUri(apiBasePath)
                 .basePath("/api-clients")
                 .body(body)
+                .when()
                 .post()
                 .then()
                 .extract().response();
@@ -66,6 +68,7 @@ public class ApiGroceryPageObject extends Common {
                 .contentType(ContentType.JSON)
                 .baseUri(apiBasePath)
                 .basePath("/carts")
+                .when()
                 .post()
                 .then()
                 .extract().response();
@@ -77,6 +80,7 @@ public class ApiGroceryPageObject extends Common {
                 .contentType(ContentType.JSON)
                 .baseUri(apiBasePath)
                 .basePath("/products")
+                .when()
                 .get()
                 .then()
                 .extract().response();
@@ -88,6 +92,7 @@ public class ApiGroceryPageObject extends Common {
                 .contentType(ContentType.JSON)
                 .baseUri(apiBasePath)
                 .basePath("/products")
+                .when()
                 .get()
                 .then()
                 .extract().response();
@@ -115,8 +120,9 @@ public class ApiGroceryPageObject extends Common {
         Response response = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .baseUri(apiBasePath)
-                .basePath("/carts/" + cardId + "/items")
+                .basePath(String.format("/carts/%s/items", cardId))
                 .body(body)
+                .when()
                 .post()
                 .then()
                 .extract().response();
@@ -135,8 +141,9 @@ public class ApiGroceryPageObject extends Common {
         Response response = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .baseUri(apiBasePath)
-                .basePath("/carts/" + cardId + "/items/" + itemId)
+                .basePath(String.format("/carts/%s/items/%s", cardId, itemId))
                 .body(body)
+                .when()
                 .patch()
                 .then()
                 .extract().response();
@@ -148,7 +155,8 @@ public class ApiGroceryPageObject extends Common {
         Response response = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .baseUri(apiBasePath)
-                .basePath("/carts/" + cardId)
+                .basePath(String.format("/carts/%s", cardId))
+                .when()
                 .get()
                 .then()
                 .extract().response();

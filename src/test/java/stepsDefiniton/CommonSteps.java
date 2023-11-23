@@ -1,6 +1,7 @@
 package stepsDefiniton;
 
 import common.Common;
+import common.Timeouts;
 import io.cucumber.java.en.Given;
 
 public class CommonSteps {
@@ -14,6 +15,7 @@ public class CommonSteps {
     @Given(APP_AND_PAGE_NAME + "Create a web driver")
     public static void clickElementContainsText() {
         Common.createDriver();
+        Common.waitSomeTime(Timeouts.MEDIUM);
     }
 
     @Given(APP_AND_PAGE_NAME + "maximize window")
