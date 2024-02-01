@@ -4,4 +4,4 @@ Here we can find GUI tests for sites like https://selenium08.blogspot.com, https
 in RestAssurd based on API https://github.com/vdespa/Postman-Complete-Guide-API-Testing/blob/main/simple-grocery-store-api.md#Status and https://reqres.in/. 
 
 # Quickstart
-In project I used Page Object Model and Wrapper Method project patterns. 
+In project I used Page Object Model and Wrapper Method project patterns. And of course the DRY rules.
