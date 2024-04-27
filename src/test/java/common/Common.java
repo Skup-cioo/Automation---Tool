@@ -43,17 +43,23 @@ public class Common {
     }
 
     public static void openApp(String nameOfApp) {
-        switch (AppName.getApplicationName(nameOfApp)) {
-            case GOOGLE:
-                driver.get(PropertiesFile.readProperties("googleURL"));
-                break;
-            case MOUSE:
-                driver.get(PropertiesFile.readProperties("mouseURL"));
-                break;
-            case AUTOMATION:
-                driver.get(PropertiesFile.readProperties("automationURL"));
-                break;
-        }
+        driver.get("https://1login.wp.pl/rejestracja?client_id=o2_poczta_o2_pl_nh&flow=registration&login_challenge=CkYKJDEyYmE2NDI0YTU4ZTA4ZDNhZTQ2M2Y0ODE5ZDQyOTRjNzg2YRC0gLOxBhoYChJvMl9wb2N6dGFfbzJfcGxfbmgSAnYxEiArCcjBPsfMfpIZVDPsk7hzRCMvvQdeD5Xldq70LRnb3A&registrationFlow=newForced&registrationBrand=o2");
+//
+//        switch (AppName.getApplicationName(nameOfApp)) {
+//            case GOOGLE:
+//                driver.get(PropertiesFile.readProperties("googleURL"));
+//                break;
+//            case MOUSE:
+//                driver.get(PropertiesFile.readProperties("mouseURL"));
+//                break;
+//            case AUTOMATION:
+//                driver.get(PropertiesFile.readProperties("automationURL"));
+//                break;
+//
+//            case O2:
+//                driver.get(PropertiesFile.readProperties("O2"));
+//                break;
+
     }
 
     public static void takeScreenShotForDriver() {

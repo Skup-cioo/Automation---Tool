@@ -14,7 +14,6 @@ import org.hamcrest.Matchers;
 import org.junit.Assert;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,7 +26,7 @@ public class ApiGroceryPageObject extends Common {
 
     public static void printProductsWithCategory(String category) {
         List<Product> listOfProduct = (List) TestExectution.paramStore.getParam("listOfProducts");
-        List<Product> filteredList = listOfProduct.stream().filter(x -> x.getCategory().equals(category))
+        List<Product> filteredList = listOfProduct.stream().filter(product -> product.getCategory().equals(category))
                 .collect(Collectors.toList());
 
         System.out.println("Products with category coffee");
@@ -44,11 +43,12 @@ public class ApiGroceryPageObject extends Common {
                 .when()
                 .get()
                 .then()
-                .assertThat().body("status", Matchers.equalTo("UP")) // We can use RestAssured method -> But this is hard Assertion
+                .assertThat()
+                .body("status", Matchers.equalTo("UP")) // We can use RestAssured method -> But this is hard Assertion
                 .log().all()
                 .extract().response();
 
-        Assert.assertEquals("Status is incorrect", checkIfFieldEquals(response, "status", "UP"), true);  // We can use our method which is not hard Asserion and has our description in case faile
+        Assert.assertEquals("Status is incorrect", checkIfFieldEquals(response, "status", "UP"), true);  // We can use our method which is not hard Assertion and has our description in case of fail
     }
 
     public static void postCreateNewClient(String body) {

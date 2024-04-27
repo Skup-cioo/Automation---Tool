@@ -8,7 +8,8 @@ import java.util.Arrays;
 public enum AppName {
     GOOGLE("GOOGLE"),
     MOUSE("MOUSE"),
-    AUTOMATION("AUTOMATION");
+    AUTOMATION("AUTOMATION"),
+    O2("O2");
 
     private final String description;
 
